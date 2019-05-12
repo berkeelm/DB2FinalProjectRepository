@@ -5,21 +5,21 @@ public class Person {
 	private String Name;
 	private String Surname;
 	private String DateOfBirth;
-	private String SocialSecurtyNumber;
-	private String ProfilePhoto;
+	private String SocialSecurityNumber;
 	private Boolean Status;
-	private String DepartmentName;
+	private int DepartmentId;
+	private int AddedUserId;
 
 	public Person(int _id, String _name, String _surname, String _dateOfBirth, String _socialSecurityNumber,
-			String _profilePhoto, Boolean _status, String _departmentName) {
+			Boolean _status, int _departmentId, int _addedUserId) {
 		this.Id = _id;
 		this.Name = _name;
 		this.Surname = _surname;
 		this.DateOfBirth = _dateOfBirth;
-		this.SocialSecurtyNumber = _socialSecurityNumber;
-		this.ProfilePhoto = _profilePhoto;
 		this.Status = _status;
-		this.DepartmentName = _departmentName;
+		this.DepartmentId = _departmentId;
+		this.AddedUserId = _addedUserId;
+		this.SocialSecurityNumber = _socialSecurityNumber;
 	}
 
 	public int getId() {
@@ -54,20 +54,12 @@ public class Person {
 		DateOfBirth = dateOfBirth;
 	}
 
-	public String getSocialSecurtyNumber() {
-		return SocialSecurtyNumber;
+	public String getSocialSecurityNumber() {
+		return SocialSecurityNumber;
 	}
 
-	public void setSocialSecurtyNumber(String socialSecurtyNumber) {
-		SocialSecurtyNumber = socialSecurtyNumber;
-	}
-
-	public String getProfilePhoto() {
-		return ProfilePhoto;
-	}
-
-	public void setProfilePhoto(String profilePhoto) {
-		ProfilePhoto = profilePhoto;
+	public void setSocialSecurityNumber(String socialSecurityNumber) {
+		SocialSecurityNumber = socialSecurityNumber;
 	}
 
 	public Boolean getStatus() {
@@ -78,11 +70,20 @@ public class Person {
 		Status = status;
 	}
 
-	public String getDepartmentName() {
-		return DepartmentName;
+	public int getDepartmentId() {
+		return DepartmentId;
 	}
 
-	public void setDepartmentName(String departmentName) {
-		DepartmentName = departmentName;
+	public void setDepartmentId(int departmentId) {
+		DepartmentId = departmentId;
 	}
+
+	public int getAddedUserId() {
+		return AddedUserId;
+	}
+
+	public void setAddedUserId(int addedUserId) {
+		AddedUserId = addedUserId;
+	}
+
 }

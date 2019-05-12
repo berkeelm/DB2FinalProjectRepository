@@ -53,6 +53,7 @@ public class PersonForm {
 	 */
 	public PersonForm() {
 		initialize();
+		this.frame.setVisible(true);
 	}
 
 	/**
@@ -72,15 +73,16 @@ public class PersonForm {
 	}
 
 	private void fillPersonList() {
-		ArrayList<Person> personList = DBO.GetInstance().GetAllPerson();
+		ArrayList<PersonRepo> personList = DBO.GetInstance().GetAllPerson();
 
 		String[] strArr = new String[personList.size()];
 		int index = 0;
-		for (Person person : personList) {
+		for (PersonRepo person : personList) {
 			strArr[index] = equalSpace(person.getId(), 5) + getSpace() + equalSpace(person.getName(), 10) + getSpace()
 					+ equalSpace(person.getSurname(), 10) + getSpace() + equalSpace(person.getDateOfBirth(), 10)
-					+ getSpace() + equalSpace(person.getSocialSecurtyNumber(), 11) + getSpace()
-					+ equalSpace(person.getDepartmentName(), 20);
+					+ getSpace() + equalSpace(person.getSocialSecurityNumber(), 11) + getSpace()
+					+ equalSpace(person.getDepartmentName(), 20) + getSpace()
+					+ equalSpace(person.getAddedUserName(), 15);
 			index++;
 		}
 
@@ -89,7 +91,8 @@ public class PersonForm {
 		String[] headerArr = new String[1];
 		headerArr[0] = equalSpace("Id", 5) + getSpace() + equalSpace("Name", 10) + getSpace()
 				+ equalSpace("Surname", 10) + getSpace() + equalSpace("Birth Date", 10) + getSpace()
-				+ equalSpace("SSN", 11) + getSpace() + equalSpace("Department Name", 20);
+				+ equalSpace("SSN", 11) + getSpace() + equalSpace("Department Name", 20) + getSpace()
+				+ equalSpace("Added By", 15);
 		list_1.setListData(headerArr);
 	}
 
@@ -106,25 +109,25 @@ public class PersonForm {
 
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1243, 563);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 1333, 563);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		list = new JList();
-		list.setBounds(10, 32, 793, 429);
+		list.setBounds(10, 32, 899, 429);
 		list.setFont(new Font("monospaced", Font.PLAIN, 13));
 		frame.getContentPane().add(list);
 
 		list_1 = new JList();
 		list_1.setEnabled(false);
-		list_1.setBounds(10, 11, 793, 24);
+		list_1.setBounds(10, 11, 899, 24);
 		list_1.setFont(new Font("monospaced", Font.PLAIN, 13));
 		frame.getContentPane().add(list_1);
 
 		fillPersonList();
 
 		final JPanel panel = new JPanel();
-		panel.setBounds(825, 11, 392, 450);
+		panel.setBounds(919, 11, 392, 450);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		panel.setVisible(false);
@@ -177,9 +180,9 @@ public class PersonForm {
 		lblMonth.setBounds(122, 207, 46, 14);
 		panel.add(lblMonth);
 
-		JLabel label = new JLabel("Month");
-		label.setBounds(251, 207, 46, 14);
-		panel.add(label);
+		JLabel lblYear = new JLabel("Year");
+		lblYear.setBounds(251, 207, 46, 14);
+		panel.add(lblYear);
 
 		cbYear = new JComboBox();
 		cbYear.setBounds(294, 204, 76, 20);
@@ -210,8 +213,13 @@ public class PersonForm {
 				String name = tbName.getText();
 				String surname = tbSurname.getText();
 				String departmentName = cbDepartmentName.getSelectedItem().toString();
-				String dateOfBirth = cbYear.getSelectedItem().toString() + "-" + cbMonth.getSelectedItem().toString()
-						+ "-" + cbDay.getSelectedItem().toString();
+				String dateOfBirth = cbYear.getSelectedItem().toString() + "-"
+						+ (cbMonth.getSelectedItem().toString().length() == 1
+								? "0" + cbMonth.getSelectedItem().toString()
+								: cbMonth.getSelectedItem().toString())
+						+ "-"
+						+ (cbDay.getSelectedItem().toString().length() == 1 ? "0" + cbDay.getSelectedItem().toString()
+								: cbDay.getSelectedItem().toString());
 				String socialSecurityNumber = tbSsn.getText();
 
 				if (name.equals("") || surname.equals("") || socialSecurityNumber.equals("")) {
@@ -243,7 +251,7 @@ public class PersonForm {
 				panel.setVisible(true);
 			}
 		});
-		btnCreateNewPerson.setBounds(576, 472, 227, 31);
+		btnCreateNewPerson.setBounds(682, 472, 227, 31);
 		frame.getContentPane().add(btnCreateNewPerson);
 
 		JButton btnUpdateSelectedPerson = new JButton("Update Selected Person");
@@ -255,7 +263,7 @@ public class PersonForm {
 					JOptionPane.showMessageDialog(null, "Select a person first!", "Error!", 0);
 				else {
 					int personId = Integer.parseInt(list.getSelectedValue().toString().split(" ")[0]);
-					Person person = DBO.GetInstance().GetPersonById(personId);
+					PersonRepo person = DBO.GetInstance().GetPersonById(personId);
 
 					if (person == null) {
 						JOptionPane.showMessageDialog(null, "Oops, an error occured!", "Error!", 0);
@@ -263,7 +271,7 @@ public class PersonForm {
 					}
 					clearForm();
 					tbPersonId.setText(String.valueOf(person.getId()));
-					tbSsn.setText(person.getSocialSecurtyNumber());
+					tbSsn.setText(person.getSocialSecurityNumber());
 					tbName.setText(person.getName());
 					tbSurname.setText(person.getSurname());
 					cbDepartmentName.setSelectedItem(person.getDepartmentName());
@@ -275,7 +283,7 @@ public class PersonForm {
 				}
 			}
 		});
-		btnUpdateSelectedPerson.setBounds(339, 472, 227, 31);
+		btnUpdateSelectedPerson.setBounds(445, 472, 227, 31);
 		frame.getContentPane().add(btnUpdateSelectedPerson);
 
 		JButton btnDeleteSelectedPerson = new JButton("Delete Selected Person");
@@ -307,25 +315,28 @@ public class PersonForm {
 				}
 			}
 		});
-		btnDeleteSelectedPerson.setBounds(102, 472, 227, 31);
+		btnDeleteSelectedPerson.setBounds(208, 472, 227, 31);
 		frame.getContentPane().add(btnDeleteSelectedPerson);
 
 		for (int i = 1; i <= 31; i++) {
-			cbDay.addItem(i);
+			cbDay.addItem(String.valueOf(i).length() == 1 ? ("0" + String.valueOf(i)) : String.valueOf(i));
 		}
 
 		for (int i = 1; i <= 12; i++) {
-			cbMonth.addItem(i);
+			cbMonth.addItem(String.valueOf(i).length() == 1 ? ("0" + String.valueOf(i)) : String.valueOf(i));
 		}
 
 		for (int i = 1900; i <= 2050; i++) {
 			cbYear.addItem(i);
 		}
 
-		ArrayList<Department> departmens = DBO.GetInstance().GetAllDepartments();
+		ArrayList<DepartmentRepo> departmens = DBO.GetInstance().GetAllDepartments();
 
-		for (Department department : departmens) {
+		for (DepartmentRepo department : departmens) {
 			cbDepartmentName.addItem(department.getName());
 		}
+		
+		java.awt.Dimension dim = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
 	}
 }
